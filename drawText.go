@@ -61,6 +61,9 @@ func (p *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 		p.m = p.images.NewImage(sz.WidthPx, sz.HeightPx)
 	}
 
+	// clear image in p.m
+	p.m.RGBA.Pix = make([]uint8, len(p.m.RGBA.Pix))
+
 	drawText(p.m.RGBA, int(geom.Pt(x) / scaleX), int(geom.Pt(y) / scaleY), s)
 	
 	// copy img data to GL device
