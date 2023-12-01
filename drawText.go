@@ -3,7 +3,8 @@ package util
 import (
 	"image"
 	"image/color"
-	// "image/draw"
+	"image/draw"
+	"strings"
 	// "time"
 
 	// "golang.org/x/image/draw"
@@ -48,34 +49,49 @@ func NewText(images *glutil.Images) *Text {
 }
 
 // Draw draws text at the x, y coordinate and scaleX and scaleY specified by user
-func (p *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
+func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 	if sz.WidthPx == 0 && sz.HeightPx == 0 {
 		return
-	}
-
-	if p.sz != sz {
-		p.sz = sz
-		if p.m != nil {
-			p.m.Release()
+	} else if t.m == nil {
+		t.sz = sz
+		if t.m != nil {
+			t.m.Release()
 		}
-		p.m = p.images.NewImage(sz.WidthPx, sz.HeightPx)
+		t.m = t.images.NewImage(sz.WidthPx, sz.HeightPx)
 	}
 
-	// clear image in p.m
-	p.m.RGBA.Pix = make([]uint8, len(p.m.RGBA.Pix))
+	// split string by newline
+	lines := strings.Split(s, "\n")
 
-	drawText(p.m.RGBA, int(geom.Pt(x) / scaleX), int(geom.Pt(y) / scaleY), s)
+	// draw each string on a seperate line
+	for i, v := range lines {
+		drawText(t.m.RGBA, int(geom.Pt(x) / scaleX), int(geom.Pt(y) / scaleY) + i * 10, v)
+	}
 	
 	// copy img data to GL device
-	p.m.Upload()
+	t.m.Upload()
 
-	p.m.Draw(
+	t.m.Draw(
 		sz,
 		geom.Point{0, 0},	// topLeft	
 		geom.Point{sz.WidthPt * scaleX, 0},	// topRight
 		geom.Point{0, sz.HeightPt * scaleY},	// bottomLeft
-		p.m.RGBA.Bounds(),
+		t.m.RGBA.Bounds(),
 	)
+}
+
+func (t *Text) Clear(sz size.Event) {
+	// if size change then resize image
+	if t.sz != sz {
+		t.sz = sz
+		if t.m != nil {
+			t.m.Release()
+		}
+		t.m = t.images.NewImage(sz.WidthPx, sz.HeightPx)
+	}
+
+	// clear image
+	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.White, image.Point{}, draw.Src)
 }
 
 func (t *Text) Release() {
