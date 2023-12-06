@@ -91,7 +91,7 @@ func (t *Text) Clear(sz size.Event) {
 	}
 
 	// clear image
-	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.White, image.Point{}, draw.Src)
+	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
 }
 
 func (t *Text) Release() {
