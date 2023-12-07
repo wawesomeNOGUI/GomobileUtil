@@ -60,6 +60,9 @@ func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 		t.m = t.images.NewImage(sz.WidthPx, sz.HeightPx)
 	}
 
+	// clear image
+	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
+
 	// split string by newline
 	lines := strings.Split(s, "\n")
 
