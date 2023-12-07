@@ -84,16 +84,6 @@ func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 }
 
 func (t *Text) Clear(sz size.Event) {
-	// if size change then resize image
-	if t.sz != sz {
-		t.sz = sz
-		if t.m != nil {
-			t.m.Release()
-		}
-		t.m = t.images.NewImage(sz.WidthPx, sz.HeightPx)
-	}
-
-	// clear image
 	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
 }
 
