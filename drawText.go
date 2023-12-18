@@ -61,7 +61,7 @@ func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 	}
 
 	// clear image
-	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
+	// draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
 
 	// split string by newline
 	lines := strings.Split(s, "\n")
@@ -83,8 +83,10 @@ func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 	)
 }
 
-func (t *Text) Clear(sz size.Event) {
-	draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
+func (t *Text) Clear() {
+	if t.m != nil {
+		draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
+	}
 }
 
 func (t *Text) Release() {
