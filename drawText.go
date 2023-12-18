@@ -5,9 +5,7 @@ import (
 	"image/color"
 	"image/draw"
 	"strings"
-	// "time"
 
-	// "golang.org/x/image/draw"
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 	"golang.org/x/image/font/basicfont"
@@ -15,10 +13,7 @@ import (
 	"golang.org/x/mobile/event/size"
 	"golang.org/x/mobile/exp/gl/glutil"
 	"golang.org/x/mobile/geom"
-	// "golang.org/x/mobile/exp/font"
 )
-
-// var f []byte = font.Default() 
 
 func drawText(img *image.RGBA, x, y int, s string) {
     col := color.RGBA{0, 0, 0, 255}
@@ -41,14 +36,15 @@ type Text struct {
 	// TODO: store *gl.Context
 }
 
-// NewText creates an Text tied to the current GL context.
+// NewText creates a Text tied to the current GL context.
 func NewText(images *glutil.Images) *Text {
 	return &Text{
 		images:   images,
 	}
 }
 
-// Draw draws text at the x, y coordinate and scaleX and scaleY specified by user
+// Draw draws text at the x, y coordinates at the scaleX, scaleY specified by user
+// Draw accepts strings with newline characters
 func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 	if sz.WidthPx == 0 && sz.HeightPx == 0 {
 		return
@@ -59,9 +55,6 @@ func (t *Text) Draw(sz size.Event, x, y int, scaleX, scaleY geom.Pt, s string) {
 		}
 		t.m = t.images.NewImage(sz.WidthPx, sz.HeightPx)
 	}
-
-	// clear image
-	// draw.Draw(t.m.RGBA, t.m.RGBA.Bounds(), image.Transparent, image.Point{}, draw.Src)
 
 	// split string by newline
 	lines := strings.Split(s, "\n")
